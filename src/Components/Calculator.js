@@ -1,13 +1,28 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 export default function Calculator() {
-  let wt = document.getElementById("customRange1");
+  const [weight, setweight] = useState(70);
+  const [height, setheight] = useState(150);
 
-  let count = 0;
-  const OnHeightChange = (event) => {
-    count++;
-    console.log(event);
+  const SETHEIGHT = (event) => {
+    setheight(event.target.value);
   };
+
+  const SETWEIGHT = (event) => {
+    setweight(event.target.value);
+  };
+  const bmicalculation = (weight, height) => {
+    let newheight = height / 100;
+    let bmi = (weight / (newheight * newheight)).toFixed(1);
+    // returns upto 1 decimal place
+
+    return bmi;
+  };
+
+  const calculation = useMemo(
+    () => bmicalculation(weight, height),
+    [height, weight]
+  );
 
   return (
     <>
@@ -32,14 +47,28 @@ export default function Calculator() {
             // ******
             backgroundColor: "#1b1096",
           }}
-        ></div>
+        >
+          {" "}
+          <p
+            style={{
+              color: "white",
+              fontSize: 45,
+              position: "relative",
+              left: 120,
+              top: 7,
+            }}
+          >
+            {" "}
+            BMI CALCULATOR
+          </p>
+        </div>
 
         <label
           for="customRange1"
           className="form-label "
-          style={{ position: "relative", left: 65, top: 20 }}
+          style={{ position: "relative", left: 65, top: 30 }}
         >
-          Weight :{count}
+          Weight :{weight} kgs
         </label>
 
         <div
@@ -53,29 +82,42 @@ export default function Calculator() {
             left: 260,
             borderRadius: 15,
           }}
-        ></div>
-        {/* <label for="customRange1" className="form-label " >Height : </label> */}
+        >
+          {" "}
+          <p
+            style={{ color: "white", position: "relative", left: 19, top: 12 }}
+          >
+            {" "}
+            {calculation}
+          </p>{" "}
+        </div>
+
         <input
           type="range"
           className="form-range"
           id="customRange1"
-          onChange={OnHeightChange}
-          style={{ width: 380, position: "relative", left: 60, bottom: 30 }}
+          onClick={SETWEIGHT}
+          style={{ width: 480, position: "relative", left: 60, bottom: 30 }}
+          min="0"
+          max="150"
         />
 
         <label
           for="customRange1"
           className="form-label "
-          style={{ position: "relative", right: 317, top: 10 }}
+          style={{ position: "relative", right: 417, top: 10 }}
         >
-          Height :{count}
+          Height :{height} cms
         </label>
 
         <input
           type="range"
           className="form-range"
           id="customRange2"
-          style={{ width: 380, position: "relative", left: 60, top: 10 }}
+          onClick={SETHEIGHT}
+          style={{ width: 480, position: "relative", left: 60, top: 10 }}
+          min="50"
+          max="250"
         />
       </div>
     </>
